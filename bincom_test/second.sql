@@ -1,213 +1,7 @@
--- phpMyAdmin SQL Dump
--- version 3.2.0.1
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: May 20, 2011 at 05:08 PM
--- Server version: 5.1.36
--- PHP Version: 5.2.9-2
+-- Populate database
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
---
--- Database: `bincomphptest`
---
-DROP DATABASE IF EXISTS `bincomphptest`;
-CREATE DATABASE IF NOT EXISTS `bincomphptest`;
-
--- --------------------------------------------------------
-
--- User: `bincom`
-CREATE USER IF NOT EXISTS 'bincom'@'localhost' IDENTIFIED BY 'bincom_pwd';
-GRANT ALL ON `bincomphptest`.* TO 'bincom'@'localhost';
-GRANT SELECT ON performance_schema.* TO 'bincom'@'localhost';
-
--- Select Database
 
 USE `bincomphptest`;
-
--- --------------------------------------------------------
-
--- --------------------------------------------------------
-
---
--- Table structure for table `states`
---
-
-DROP TABLE IF EXISTS `states`;
-CREATE TABLE IF NOT EXISTS `states` (
-  `state_id` int(11) NOT NULL,
-  `state_name` varchar(50) UNIQUE NOT NULL,
-  PRIMARY KEY (`state_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Table structure for table `party`
---
-
-DROP TABLE IF EXISTS `party`;
-CREATE TABLE IF NOT EXISTS `party` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `partyid` varchar(11) NOT NULL,
-  `partyname` varchar(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
-
---
--- Table structure for table `lga`
---
-
-DROP TABLE IF EXISTS `lga`;
-CREATE TABLE IF NOT EXISTS `lga` (
-  `uniqueid` int(11) NOT NULL AUTO_INCREMENT,
-  `lga_id` int(11) UNIQUE NOT NULL,
-  `lga_name` varchar(50) UNIQUE NOT NULL,
-  `state_id` int(50) NOT NULL,
-  `lga_description` text,
-  `entered_by_user` varchar(50) NOT NULL,
-  `date_entered` datetime NOT NULL,
-  `user_ip_address` varchar(50) NOT NULL,
-  PRIMARY KEY (`uniqueid`),
-  FOREIGN KEY (`state_id`) REFERENCES `states`(`state_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
-
-
---
--- Table structure for table `ward`
---
-
-DROP TABLE IF EXISTS `ward`;
-CREATE TABLE IF NOT EXISTS `ward` (
-  `uniqueid` int(11) NOT NULL AUTO_INCREMENT,
-  `ward_id` int(11) NOT NULL,
-  `ward_name` varchar(50) UNIQUE NOT NULL,
-  `lga_id` int(11) NOT NULL,
-  `ward_description` text,
-  `entered_by_user` varchar(50) NOT NULL,
-  `date_entered` datetime NOT NULL,
-  `user_ip_address` varchar(50) NOT NULL,
-  PRIMARY KEY (`uniqueid`),
-  FOREIGN KEY (`lga_id`) REFERENCES `lga`(`lga_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=264 ;
-
-
---
--- Table structure for table `polling_unit`
---
-
-DROP TABLE IF EXISTS `polling_unit`;
-CREATE TABLE IF NOT EXISTS `polling_unit` (
-  `uniqueid` int(11) NOT NULL AUTO_INCREMENT,
-  `polling_unit_id` int(11) NOT NULL,
-  `ward_id` int(11) NOT NULL,
-  `lga_id` int(11) DEFAULT NULL,
-  `uniquewardid` int(11) DEFAULT NULL,
-  `polling_unit_number` varchar(50) DEFAULT NULL,
-  `polling_unit_name` varchar(50) DEFAULT NULL,
-  `polling_unit_description` text,
-  `lat` varchar(255) DEFAULT NULL,
-  `long` varchar(255) DEFAULT NULL,
-  `entered_by_user` varchar(50) DEFAULT NULL,
-  `date_entered` datetime DEFAULT NULL,
-  `user_ip_address` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`uniqueid`),
-  FOREIGN KEY (`lga_id`) REFERENCES `lga`(`lga_id`),
-  FOREIGN KEY (`uniquewardid`) REFERENCES `ward` (`uniqueid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=280 ;
-
---
--- Table structure for table `announced_lga_results`
---
-
-DROP TABLE IF EXISTS `announced_lga_results`;
-CREATE TABLE IF NOT EXISTS `announced_lga_results` (
-  `result_id` int(11) NOT NULL AUTO_INCREMENT,
-  `lga_id` int(11) NOT NULL,
-  `party_abbreviation` char(4) NOT NULL,
-  `party_score` int(11) NOT NULL,
-  `entered_by_user` varchar(50) NOT NULL,
-  `date_entered` datetime NOT NULL,
-  `user_ip_address` varchar(50) NOT NULL,
-  PRIMARY KEY (`result_id`),
-  FOREIGN KEY (`lga_id`) REFERENCES `lga`(`lga_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=244 ;
-
-
---
--- Table structure for table `announced_pu_results`
---
-
-DROP TABLE IF EXISTS `announced_pu_results`;
-CREATE TABLE IF NOT EXISTS `announced_pu_results` (
-  `result_id` int(11) NOT NULL AUTO_INCREMENT,
-  `polling_unit_uniqueid` int(11) NOT NULL,
-  `party_abbreviation` char(4) NOT NULL,
-  `party_score` int(11) NOT NULL,
-  `entered_by_user` varchar(50) NOT NULL,
-  `date_entered` datetime NOT NULL,
-  `user_ip_address` varchar(50) NOT NULL,
-  PRIMARY KEY (`result_id`),
-  FOREIGN KEY (`polling_unit_uniqueid`) REFERENCES `polling_unit`(`uniqueid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=261 ;
-
-
---
--- Table structure for table `announced_ward_results`
---
-
-DROP TABLE IF EXISTS `announced_ward_results`;
-CREATE TABLE IF NOT EXISTS `announced_ward_results` (
-  `result_id` int(11) NOT NULL AUTO_INCREMENT,
-  `ward_name` varchar(50) NOT NULL,
-  `party_abbreviation` char(4) NOT NULL,
-  `party_score` int(11) NOT NULL,
-  `entered_by_user` varchar(50) NOT NULL,
-  `date_entered` datetime NOT NULL,
-  `user_ip_address` varchar(50) NOT NULL,
-  PRIMARY KEY (`result_id`),
-  FOREIGN KEY (`ward_name`) REFERENCES `ward`(`ward_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- Table structure for table `announced_state_results`
---
-
-DROP TABLE IF EXISTS `announced_state_results`;
-CREATE TABLE IF NOT EXISTS `announced_state_results` (
-  `result_id` int(11) NOT NULL AUTO_INCREMENT,
-  `state_id` int(11) NOT NULL,
-  `party_abbreviation` char(4) NOT NULL,
-  `party_score` int(11) NOT NULL,
-  `entered_by_user` varchar(50) NOT NULL,
-  `date_entered` datetime NOT NULL,
-  `user_ip_address` varchar(50) NOT NULL,
-  PRIMARY KEY (`result_id`),
-  FOREIGN KEY (`state_id`) REFERENCES `states`(`state_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- Table structure for table `agentname`
---
-
-DROP TABLE IF EXISTS `agentname`;
-CREATE TABLE IF NOT EXISTS `agentname` (
-  `name_id` int(11) NOT NULL AUTO_INCREMENT,
-  `firstname` varchar(255) NOT NULL,
-  `lastname` varchar(255) NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `phone` char(13) NOT NULL,
-  `pollingunit_uniqueid` int(11) NOT NULL,
-  PRIMARY KEY (`name_id`),
-  FOREIGN KEY (`pollingunit_uniqueid`) REFERENCES `polling_unit`(`uniqueid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
-
--- --------------------------------------------------------
 
 --
 -- Dumping data for table `states`
@@ -581,7 +375,7 @@ INSERT INTO `ward` (`uniqueid`, `ward_id`, `ward_name`, `lga_id`, `ward_descript
 -- Dumping data for table `polling_unit`
 --
 
-INSERT INTO `polling_unit` (`uniqueid`, `polling_unit_id`, `ward_id`, `lga_id`, `uniquewardid`, `polling_unit_number`, `polling_unit_name`, `polling_unit_description`, `lat`, `long`, `entered_by_user`, `date_entered`, `user_ip_address`) VALUES
+INSERT INTO `polling_unit` (`uniqueid`, `polling_unit_id`, `ward_id`, `lga_id`, `uniquewardid_id`, `polling_unit_number`, `polling_unit_name`, `polling_unit_description`, `lat`, `long`, `entered_by_user`, `date_entered`, `user_ip_address`) VALUES
 (8, 6, 8, 17, 181, 'DT1708006', 'Sapele Ward 8 PU _', NULL, '5.59371889', '5.999311165', NULL, NULL, NULL),
 (9, 4, 1, 19, 194, 'DT1901004', 'Primary School in Aghara', 'Primary School in Aghara', '5.599585986', '6.001336288', NULL, NULL, NULL),
 (10, 5, 1, 19, 194, 'DT1401005', 'Ishere Primary School  Aghara', 'Ishere Primary School Aghara', '5.595722496', '5.99961724', NULL, NULL, NULL),
@@ -1093,7 +887,7 @@ INSERT INTO `announced_lga_results` (`result_id`, `lga_id`, `party_abbreviation`
 -- Dumping data for table `announced_pu_results`
 --
 
-INSERT INTO `announced_pu_results` (`result_id`, `polling_unit_uniqueid`, `party_abbreviation`, `party_score`, `entered_by_user`, `date_entered`, `user_ip_address`) VALUES
+INSERT INTO `announced_pu_results` (`result_id`, `polling_unit_uniqueid_id`, `party_abbreviation`, `party_score`, `entered_by_user`, `date_entered`, `user_ip_address`) VALUES
 (111, 8, 'PDP', 802, 'Bose', '2011-04-26 15:44:03', '192.168.1.101'),
 (112, 8, 'DPP', 719, 'Bose', '2011-04-26 15:44:03', '192.168.1.101'),
 (113, 8, 'ACN', 416, 'Bose', '2011-04-26 15:44:03', '192.168.1.101'),
@@ -1251,11 +1045,11 @@ INSERT INTO `announced_pu_results` (`result_id`, `polling_unit_uniqueid`, `party
 -- Dumping data for table `agentname`
 --
 
-INSERT INTO `agentname` (`name_id`, `firstname`, `lastname`, `email`, `phone`, `pollingunit_uniqueid`) VALUES
-(1, 'Christian', 'Emenike', 'christian@bincom.net', '08034699500', 1),
-(2, 'Ngozi', 'Emenike', 'biggysmalls@home.net', '08089003444', 2),
-(3, 'Chinyere', 'Emenike', 'chinyere@emenike.net', '07034532310', 1),
-(4, 'Chimezie', 'Emenike', 'chimezie@emenike.net', '07034532322', 2);
+INSERT INTO `agentname` (`name_id`, `firstname`, `lastname`, `email`, `phone`, `pollingunit_unique_id`) VALUES
+(1, 'Christian', 'Emenike', 'christian@bincom.net', '08034699500', 8),
+(2, 'Ngozi', 'Emenike', 'biggysmalls@home.net', '08089003444', 9),
+(3, 'Chinyere', 'Emenike', 'chinyere@emenike.net', '07034532310', 8),
+(4, 'Chimezie', 'Emenike', 'chimezie@emenike.net', '07034532322', 9);
 
 --
 -- Dumping data for table `announced_state_results`

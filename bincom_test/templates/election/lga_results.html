@@ -1,0 +1,55 @@
+{% extends 'election/base.html' %}
+
+{% block placeholder %}
+    <form method="POST">
+        {% csrf_token %}
+        <select id="lga" name="lga_id" required>
+            <option disabled selected>Please select LGA</option>
+            {% for lga in LGAs %}
+                <option value="{{ lga.lga_id }}">{{ lga.lga_name }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit">
+    </form>
+
+    {% if error is not None %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    {% if pollingunits and total %}
+    <h1> Full result for {{ lga_name}}</h1>
+        {% for poll, scores in pollingunits.items %}
+            {% if scores %}
+                <h2>{{ poll }}</h1>
+                <table>
+                    <thead>
+                        <th>Party Name</th>
+                        <th>Party Score</th>
+                    </thead>
+                    {% for party, score in scores.items %}
+                        <tr>
+                            <td>{{ party }}</td>
+                            <td> {{ score }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        {% endfor %}
+        
+        <h2>Sum Total</h1>
+        <table>
+            <thead>
+                <th>Party</th>
+                <th>Total</th>
+            </thead>
+            {% for party, score in total.items %}
+            <tr>
+                <td>{{ party }}</td>
+                <td> {{ score }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% elif post and not error %}
+        <h1>No results for {{ lga_name }}</h1>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'election/base.html' %}
+
+{% block placeholder %}
+
+    <form method="POST">
+
+        {% csrf_token %}
+        <input list="polling_unit" id="polling_unit_input" name="uniqueid" placeholder="Enter a Polling Unit" required>
+        <datalist id="polling_unit">
+            {% for unit in polling_units %}
+                {% if unit.polling_unit_name %}
+                    <option value="{{ unit.uniqueid }}">{{ unit.polling_unit_name|title }}</option>
+                {% endif %}
+            {% endfor %}
+        </datalist>
+
+        <input type="submit">
+    </form>
+
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    {% if results %}
+    <h1>
+        Results for {{ unit.polling_unit_name|title }}
+        in {{ unit.uniquewardid.ward_name|title }}, {{ unit.lga.lga_name|title }}
+    </h1>
+    <table>
+       <thead>
+        <th>Party</th>
+        <th>Score</th>
+       </thead>
+        {% for result in results %}
+          <tr>
+            <td>{{ result.party_abbreviation }}</td>
+            <td>{{ result.party_score }}</td>
+          </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if post %}
+    <a href="#polling_unit_input">Select a Polling Unit to display results </a>
+    {% else %}
+        <p>Select a Polling Unit to display results</p>
+    {% endif %}
+{% endblock %}
