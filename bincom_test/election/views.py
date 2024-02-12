@@ -1,8 +1,14 @@
 from django.shortcuts import render
-from .models import PollingUnit, LGA, Party
+from .models import PollingUnit, LGA
 
 
 # Create your views here.
+
+def index(requests):
+    """home page"""
+    return render(requests, 'election/index.html')
+
+
 def get_pu_results(request):
     """get polling unit request"""
     error = None

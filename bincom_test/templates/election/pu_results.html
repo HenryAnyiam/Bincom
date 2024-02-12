@@ -1,7 +1,14 @@
-{% extends 'election/base.html' %}
-
-{% block placeholder %}
-
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'election/pu_styles.css' %}">
+</head>
+<body>
+    <div id="form">
     <form method="POST">
 
         {% csrf_token %}
@@ -14,9 +21,9 @@
             {% endfor %}
         </datalist>
 
-        <input type="submit">
+        <input type="submit" id="submit">
     </form>
-
+    </div>
     {% if error %}
         <p>{{ error }}</p>
     {% endif %}
@@ -41,8 +48,12 @@
     {% endif %}
 
     {% if post %}
-    <a href="#polling_unit_input">Select a Polling Unit to display results </a>
+    <a href="#polling_unit_input">Select a Polling Unit to display results </a><br/>
     {% else %}
         <p>Select a Polling Unit to display results</p>
     {% endif %}
-{% endblock %}
+
+    <a href="{% url 'election:home' %}">Home</a><br/>
+    <a href="{% url 'election:lga_results' %}">View Full LGA Results</a><br/>
+</body>
+</html>

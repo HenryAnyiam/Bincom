@@ -1,23 +1,34 @@
-{% extends 'election/base.html' %}
-
-{% block placeholder %}
-    <form method="POST">
-        {% csrf_token %}
-        <select id="lga" name="lga_id" required>
-            <option disabled selected>Please select LGA</option>
-            {% for lga in LGAs %}
-                <option value="{{ lga.lga_id }}">{{ lga.lga_name }}</option>
-            {% endfor %}
-        </select>
-        <input type="submit">
-    </form>
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'election/lga_style.css' %}">
+</head>
+<body>
+    <div id="form" >
+        <form method="POST">
+            {% csrf_token %}
+            <select id="lga" name="lga_id" required>
+                <option disabled selected>Please select LGA</option>
+                {% for lga in LGAs %}
+                    <option value="{{ lga.lga_id }}">{{ lga.lga_name }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" id="submit">
+        </form>
+    </div>
+    
 
     {% if error is not None %}
-        <p>{{ error }}</p>
+        <p id="error">{{ error }}</p>
     {% endif %}
 
     {% if pollingunits and total %}
     <h1> Full result for {{ lga_name}}</h1>
+    
         {% for poll, scores in pollingunits.items %}
             {% if scores %}
                 <h2>{{ poll }}</h1>
@@ -52,4 +63,8 @@
     {% elif post and not error %}
         <h1>No results for {{ lga_name }}</h1>
     {% endif %}
-{% endblock %}
+
+    <a href="{% url 'election:home' %}">Home</a><br/>
+    <a href="{% url 'election:pu_results' %}">View Polling Unit Results</a><br/>
+</body>
+</html>
