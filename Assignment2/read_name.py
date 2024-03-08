@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""read names from a text file"""
 
 with open("name.txt", "r", encoding="utf-8") as my_file:
     line = my_file.read()
