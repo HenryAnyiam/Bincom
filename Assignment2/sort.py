@@ -1,6 +1,8 @@
 #!/usr/bin/python3
+"""sort an array of integers using the merge sort algorithm"""
 
-def merge(array, start, mid, end):
+
+def merge(array:list, start:int, mid:int, end:int) -> None:
     """merge array"""
     left_arr = array[start:mid + 1]
     right_arr = array[mid + 1:end + 1]
@@ -25,7 +27,7 @@ def merge(array, start, mid, end):
         k += 1
 
 
-def merge_sort(array, start, end):
+def merge_sort(array:list, start:int, end:int) -> None:
     """recursively split the array"""
 
     if start < end:
@@ -35,7 +37,7 @@ def merge_sort(array, start, end):
         merge(array, start, mid, end)
 
 
-def start_sort(array):
+def start_sort(array:list) -> None:
     """call the recursive function"""
     length = len(array)
     merge_sort(array, 0, length)
