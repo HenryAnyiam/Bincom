@@ -1,7 +1,7 @@
 #!/usr/bin/python3
+"""Binary search implementation"""
 
-
-def binary_search(array, value, start, end):
+def binary_search(array:list, value:int, start:int, end:int) -> int:
     """search a sorted array"""
 
     mid = (start + end) // 2
