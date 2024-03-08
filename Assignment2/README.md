@@ -1,6 +1,6 @@
 # Second Assignment for the Bincom Academy Class
 
-## Question 1: Create a text file that has your full name, and write code to read it and extract firstname,surname, and lastname
+## Question 1: Create a text file that has your full name, and write code to read it and extract first name, middle name and last name.
 [Answer](https://github.com/HenryAnyiam/Bincom/blob/master/Assignment2/read_name.py).
 
 ## Question 2: Using the library os, print your local file path on screen
