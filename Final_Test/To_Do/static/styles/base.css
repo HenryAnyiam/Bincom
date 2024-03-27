@@ -1,0 +1,11 @@
+body {
+    background-color: white;
+}
+
+#navbar {
+    background-color: #02459d;
+    position: sticky;
+    top: 0;
+    box-shadow: 0px 3px #ccc;
+}
+

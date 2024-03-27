@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+  
+{% load static %}
+{% block link_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles/home.css' %}">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+{% endblock %}
+
+{% block active_signup%}active{% endblock %}
+
+{% block placeholder %}
+<div id="container">
+	<div class="hidden overlay-div" id="overlay-div">
+		<div class="centered-div items-center">
+                        <div class="flex justify-end">
+                            <button class="flex" id="close">
+				    <img src="{% static 'images/icons8-close-24.png'%}" class="h-4 w-4"/>
+                            </button>
+                        </div>
+			<div class="justify-content-center container" id="new-task-form">
+			<p>Add New Task</p>
+                            <form class="" id="task-add" method="POST" action="{% url 'main_app:create_task' %}">
+				    {% csrf_token %}
+
+			            <div class="mb-3">
+			                <label for="title" class="form-label">Task Title</label>
+                			<input type="text" name="title" id="title" class="form-control" placeholder="Task Title" required>
+           			     </div>
+            			     <div class="mb-3">
+                			<label for="due_date" class="form-label">Due Date</label>
+                			<input type="date" name="deadline_date" id="due_date" class="form-control" placeholder="Due Date" required>
+            			    </div>
+            			    <div class="mb-3">
+                			<label for="due_time" class="form-label">Due Time</label>
+                			<input type="time" name="deadline_time" id="due_time" class="form-control" placeholder="Due Time" required>
+            			    </div>
+				    <input type="hidden" name="user" value="{{ user.id }}"/>
+
+            				<input type="submit" class="btn btn-primary" value="Continue">
+                            </form>
+                        </div>
+		</div>
+	</div>
+	{{ error }}
+	<div id="table-container">
+	<table id="head">
+		<thead>
+			<tr id="table-row" style="margin-bottom: 10px;">
+				<th>Title</th>
+				<th>Due In</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for object in objects %}
+			<tr id="table-row" style="margin-bottom: 10px;">
+				<td>{{ object.title }}</td>
+				<td>{{ object.deadline }}</td>
+				<td>
+					<form method="POST" action="{% url 'main_app:delete_task'%}">
+						{% csrf_token %}
+						<input type="hidden" value="{{ object.id }}" name="task_id"/>
+						<button class="btn btn-danger btn-sm button" id="delete_button">Delete</button></td>
+					</form>
+			</tr>
+			{% empty %}
+			<tr id="table-row" style="margin-bottom: 10px;">
+				<td colspan="3">You Currently have no tasks</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+
+	</table>
+	</div>
+</div>
+
+
+<script>
+	$("#close").bind("click", () => {
+		$("#overlay-div").toggleClass("hidden");
+	});
+	$("#addTask").bind("click", () => {
+                $("#overlay-div").toggleClass("hidden");
+        });
+</script>
+
+{% endblock %}

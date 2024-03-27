@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+  
+{% load static %}
+{% block link_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles/signup.css' %}">
+{% endblock %}
+
+{% block active_signup%}active{% endblock %}
+
+{% block placeholder %}
+<div id="container">
+    <div id="signup">
+        <p>Sign Up To Get Started</p>
+        {% if error %}
+	<em>{{ error }}</em>
+        {% endif %}
+        <form method="POST" action="{% url 'main_app:signup' %}">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" id="username" class="form-control" placeholder="Username" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="Email Address" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
+            </div>
+
+            <input type="submit" class="btn btn-primary" value="Continue">
+        </form>
+        <hr>
+        <p>Already Have an Account?</p>
+        <a href="{% url 'main_app:login' %}" class="btn btn-primary">Log In</a>
+    </div>
+</div>
+
+
+{% endblock %}
